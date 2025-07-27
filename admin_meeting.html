@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Schedule and Manage Webex Meetings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .form-container, .meeting-list {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        label {
+            font-size: 16px;
+            margin-bottom: 5px;
+            display: block;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .delete-btn:hover {
+            background-color: #d32f2f;
+        }
+        .meeting-list .card {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .meeting-list .card h3 {
+            color: #333;
+        }
+        /* Back arrow style */
+        .back-arrow {
+            font-size: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+        .back-arrow a {
+            text-decoration: none;
+            color: #4CAF50;
+        }
+        .back-arrow a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="back-arrow">
+        <a href="adminpage.php">&larr; Back</a>
+    </div>
+
+    <div class="form-container">
+        <h1>Schedule a Webex Meeting</h1>
+        <form id="scheduleForm">
+            <label for="title">Meeting Title:</label>
+            <input type="text" id="title" name="title" required><br>
+
+            <label for="date">Meeting Date:</label>
+            <input type="date" id="date" name="date" required><br>
+
+            <label for="time">Meeting Time:</label>
+            <input type="time" id="time" name="time" required><br>
+
+            <label for="level">Level:</label>
+            <input type="number" id="level" name="level" required><br>
+
+            <label for="style">Style:</label>
+            <input type="text" id="style" name="style" required><br>
+
+            <label for="description">Meeting Description:</label><br>
+            <textarea id="description" name="description" rows="4" required></textarea><br>
+
+            <label for="link">Webex Meeting Link:</label><br>
+            <input type="url" id="link" name="link" placeholder="https://webex.com/your-meeting-link" required><br>
+
+            <button type="submit">Schedule Meeting</button>
+        </form>
+    </div>
+
+    <div class="meeting-list">
+        <h1>Scheduled Meetings</h1>
+        <div id="meetingsContainer"></div>
+    </div>
+
+    <script>
+        // Retrieve meetings data from localStorage
+        const meetings = JSON.parse(localStorage.getItem('meetings')) || [];
+
+        // Get the container element where meetings will be displayed
+        const container = document.getElementById('meetingsContainer');
+
+        // Display meetings
+        function displayMeetings() {
+            container.innerHTML = ''; // Clear any existing meetings
+
+            if (meetings.length > 0) {
+                meetings.forEach((meeting, index) => {
+                    const card = document.createElement('div');
+                    card.classList.add('card');
+                    
+                    card.innerHTML = `
+                        <h3>${meeting.title}</h3>
+                        <p><strong>Date:</strong> ${meeting.date}</p>
+                        <p><strong>Time:</strong> ${meeting.time}</p>
+                        <p><strong>Level:</strong> ${meeting.level}</p>
+                        <p><strong>Style:</strong> ${meeting.style}</p>
+                        <p><strong>Description:</strong> ${meeting.description}</p>
+                        <p><strong>Link:</strong> <a href="${meeting.link}" target="_blank">Join Meeting</a></p>
+                        <button class="delete-btn" onclick="deleteMeeting(${index})">Delete</button>
+                    `;
+
+                    container.appendChild(card);
+                });
+            } else {
+                container.innerHTML = '<p>No meetings found.</p>';
+            }
+        }
+
+        // Delete meeting function
+        function deleteMeeting(index) {
+            if (confirm('Are you sure you want to delete this meeting?')) {
+                meetings.splice(index, 1); // Remove the meeting at the specified index
+                localStorage.setItem('meetings', JSON.stringify(meetings)); // Save updated meetings list to localStorage
+                displayMeetings(); // Re-display meetings
+            }
+        }
+
+        // Listen for form submission to add new meeting
+        document.getElementById('scheduleForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Get form input values
+            const title = document.getElementById('title').value;
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            const level = document.getElementById('level').value;
+            const style = document.getElementById('style').value;
+            const description = document.getElementById('description').value;
+            const link = document.getElementById('link').value;
+
+            // Create a new meeting object
+            const newMeeting = {
+                title: title,
+                date: date,
+                time: time,
+                level:level,
+                style:style,
+                description: description,
+                link: link
+            };
+
+            // Add the new meeting to the meetings array
+            meetings.push(newMeeting);
+
+            // Save the updated meetings array to localStorage
+            localStorage.setItem('meetings', JSON.stringify(meetings));
+
+            // Display updated meetings list
+            displayMeetings();
+
+            // Notify the admin
+            alert('Meeting scheduled successfully!');
+        });
+
+        // Initially display the meetings
+        displayMeetings();
+    </script>
+</body>
+</html>

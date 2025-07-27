@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff; /* Light blue background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        h2 {
+            text-align: center;
+            color: #0077b6; /* Darker blue for heading */
+        }
+
+        form {
+            background-color: #e0f7fa; /* Light cyan background for form */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Light blue shadow */
+            max-width: 400px;
+            width: 100%;
+        }
+
+        label {
+            font-size: 16px;
+            color: #0077b6;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #0077b6;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            background-color: #0077b6;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #005f8d; /* Darker blue on hover */
+        }
+
+        form input:focus {
+            border-color: #005f8d;
+            outline: none;
+        }
+
+        .paymode-group {
+            margin: 10px 0;
+        }
+
+        .paymode-group label {
+            margin-right: 20px;
+        }
+
+        /* Styling the Back button in the top corner */
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #cccccc;
+            color: black;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .back-btn:hover {
+            background-color: #bbbbbb;
+        }
+    </style>
+    <script>
+        function goToOnlinePage() {
+            if (document.getElementById('online').checked) {
+                window.location.href = "online_payment.html"; // Redirect to another page
+            }
+        }
+    </script>
+</head>
+<body>
+    <!-- Back Button in the top corner -->
+    <a href="index.html" class="back-btn">Back to Home</a>
+
+    <form action="process_payment.php" method="POST">
+        <h2>Payment Form</h2>
+        
+        <label for="name">Full Name:</label>
+        <input type="text" name="name" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" required><br><br>
+
+        <label for="card_number">Card Number:</label>
+        <input type="text" name="card_number" required><br><br>
+
+        <label for="expiry_date">Expiry Date (MM/YY):</label>
+        <input type="text" name="expiry_date" required><br><br>
+
+        <label for="cvv">CVV:</label>
+        <input type="text" name="cvv" required><br><br>
+
+        <label for="amount">Amount:</label>
+        <input type="text" name="amount" required><br><br>
+
+        
+        <input type="submit" value="Pay Now">
+    </form>
+</body>
+</html>

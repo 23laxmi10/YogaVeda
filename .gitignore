@@ -1,0 +1,21 @@
+# Ignore lib folder
+lib/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+*.bak
+*.swp
+
+# Ignore node modules (if using Node.js later)
+node_modules/
+
+# Ignore environment files (if used in future)
+.env
